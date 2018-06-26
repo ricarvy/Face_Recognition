@@ -6,7 +6,7 @@
 [Anaconda](https://www.anaconda.com/download/)
 版本在5以上均可
 <br>
-（2）.按Win+R,输入CMD打开Command窗口，输入下面语句：<br>
+（2）.打开文件位置，使用shift+鼠标左键打开Command窗口，输入下面语句：<br>
 <code>pip install -r requirements.txt</code><br>
 以下载运行所需要的依赖项
 
