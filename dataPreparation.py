@@ -8,7 +8,7 @@ import cv2
 
 def catchPictureFromCamera(windows_name,device_index,catch_num,path_name):
     cv2.namedWindow(winname=windows_name)
-    classifier=cv2.CascadeClassifier('../Algorithm/Object_Detection/data/haarcascade_frontalface_alt.xml')
+    classifier=cv2.CascadeClassifier('xml/haarcascade_frontalface_alt.xml')
     cap=cv2.VideoCapture(device_index)
     num=0
     while cap.isOpened():

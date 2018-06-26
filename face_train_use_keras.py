@@ -50,12 +50,13 @@ def read_path(path_name):
         if os.path.isdir(full_path):
             read_path(full_path)
         else:
-            if dir_item.endswith('.jpg'):
+            if dir_item.endswith('.jpg') or dir_item.endswith('.jpeg'):
                 img=cv2.imread(full_path)
                 image=resize_image(img,IMAGE_SIZE,IMAGE_SIZE)
 
                 images.append(image)
                 labels.append(path_name)
+                print(len(images))
     return images,labels
 
 def load_dataset(path_name):
@@ -63,7 +64,7 @@ def load_dataset(path_name):
 
     images=np.array(images)
 
-    labels=np.array([0 if label.endswith('me') else 1 for label in labels])
+    labels=np.array([0 if label.endswith('men') else 1 for label in labels])
 
     return images,labels
 
@@ -227,13 +228,13 @@ class Model:
         return result[0]
 
 # if __name__ == '__main__':
-dataset=Dataset('data/')
-dataset.load()
-print('shape',dataset.train_images.shape,dataset.train_labels.shape)
-
-    # # train
-    # model=Model()
-    # model.build_model(dataset=dataset)
+# dataset=Dataset('data/')
+# dataset.load()
+# print('shape',dataset.train_images.shape,dataset.train_labels.shape)
+#
+# # train
+# model=Model()
+# model.build_model(dataset=dataset)
     # model.train(dataset=dataset)
     # model.save_model(file_path='model/me.face.model.h5')
 

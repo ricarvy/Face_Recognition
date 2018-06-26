@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/1/16 13:24
 # @Author  : Li Jiawei
-# @FileName: face_predict_use_keras.py
+# @FileName: face_predict_use_keras_video.py
 # @Software: PyCharm
 
 import cv2
 import sys
 import gc
-from Test_Project.face_train_use_keras import Model
+from face_train_use_keras import Model
 
 model=Model()
 model.load_model(file_path='model/me.face.model.h5')
@@ -15,7 +15,7 @@ model.load_model(file_path='model/me.face.model.h5')
 color=(0,255,0)
 cap=cv2.VideoCapture(0)
 
-cascade_path='../Algorithm/Object_Detection/data/haarcascade_frontalface_alt2.xml'
+cascade_path='xml/haarcascade_frontalface_alt.xml'
 
 while True:
     _,frame=cap.read()
@@ -31,7 +31,7 @@ while True:
 
             if faceID == 0:
                 cv2.rectangle(frame,(x-10,y-10),(x+w+10,y+h+10),color,thickness=2)
-                cv2.putText(frame,'me',(x+30,y+30),cv2.FONT_HERSHEY_SIMPLEX,1,(255,0,255),2)
+                cv2.putText(frame,'men',(x+30,y+30),cv2.FONT_HERSHEY_SIMPLEX,1,(255,0,255),2)
             else:
                 pass
     cv2.imshow('Recognization',frame)

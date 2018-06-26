@@ -52,7 +52,7 @@ def load_dataset(path_name):
 
     images=np.array(images)
 
-    labels=np.array([0 if label.endswith('me') else 1 for label in labels])
+    labels=np.array([0 if label.endswith('men') else 1 for label in labels])
 
     return images,labels
 
