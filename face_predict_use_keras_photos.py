@@ -12,7 +12,7 @@ from face_train_use_keras import Model
 model=Model()
 model.load_model(file_path='model/me.face.model.h5')
 color=(0,255,0)
-filename='data/women/2.jpg'
+filename='data/men/2.jpg'
 cascade_path='xml/haarcascade_frontalface_alt.xml'
 
 frame = cv2.imread(filename=filename)
