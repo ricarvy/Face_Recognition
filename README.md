@@ -81,3 +81,4 @@ _________________________________________________________________<br></code>
 <code>python face_predict_use_keras_video.py</code><br>
 使用下面的语句运行图片捕捉结果：<br>
 <code>python face_predict_use_keras_video.py</code><br>
+Hint:显示结果前请改变指定图片路径（如<code>filename='data/women/2.jpg'</code>）
