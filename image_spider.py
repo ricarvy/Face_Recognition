@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
 
     name_arr = ["亚洲女","亚洲男"]
-    dir_name = ['women','men']
+    dir_name = ['w','m']
 
     count = 0
     for name in name_arr:

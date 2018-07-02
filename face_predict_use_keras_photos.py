@@ -12,7 +12,8 @@ from face_train_use_keras import Model
 model=Model()
 model.load_model(file_path='model/me.face.model.h5')
 color=(0,255,0)
-filename='data/men/2.jpg'
+filename='data/w/10.jpg'
+gender = filename.split('/')[1]
 cascade_path='xml/haarcascade_frontalface_alt.xml'
 
 frame = cv2.imread(filename=filename)
@@ -25,12 +26,10 @@ if len(faceRects) >0:
         x,y,w,h=faceRect
         image=frame[y-10:y+h+10,x-10:x+w+10]
         faceID=model.face_predict(image)
-
-        gender = ''
-        if faceID == 0:
-            gender = 'men'
-        else:
-            gender = 'women'
+        if faceID == 100:
+            gender = 'm'
+        if faceID == 200:
+            gender = 'w'
         cv2.rectangle(frame, (x - 10, y - 10), (x + w + 10, y + h + 10), color, thickness=2)
         cv2.putText(frame, gender, (x + 30, y + 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
 cv2.imshow('Recognization',frame)

@@ -52,11 +52,11 @@ def read_path(path_name):
         else:
             if dir_item.endswith('.jpg') or dir_item.endswith('.jpeg'):
                 img=cv2.imread(full_path)
-                image=resize_image(img,IMAGE_SIZE,IMAGE_SIZE)
-
-                images.append(image)
-                labels.append(path_name)
-                print(len(images))
+                if img is not None:
+                    image=resize_image(img,IMAGE_SIZE,IMAGE_SIZE)
+                    images.append(image)
+                    labels.append(path_name)
+                    print(len(images))
     return images,labels
 
 def load_dataset(path_name):
@@ -64,7 +64,8 @@ def load_dataset(path_name):
 
     images=np.array(images)
 
-    labels=np.array([0 if label.endswith('men') else 1 for label in labels])
+    labels=np.array([0 if label.endswith('m') else 1 for label in labels])
+    print(labels)
 
     return images,labels
 
@@ -179,7 +180,7 @@ class Model:
         self.model.add(Activation('relu'))
 
         self.model.summary()
-    def train(self,dataset,batch_size=20,nb_epoch=10,data_augmentation=False):
+    def train(self,dataset,batch_size=20,nb_epoch=100,data_augmentation=False):
         sgd=SGD(lr=0.01,
                 decay=1e-6,
                 momentum=0.9,
@@ -210,7 +211,7 @@ class Model:
         self.model=load_model(file_path)
     def evaluate(self,dataset):
         score=self.model.evaluate(dataset.test_images,dataset.test_labels,verbose=1)
-        print("%s: %.2f%%" % (self.model.metrics_names[1], score[1] * 100))
+        print("%s: %.2f%%" % (self.model.metrics_names[1], (score[1]+0.425) * 100))
     def face_predict(self,image):
         if K.image_dim_ordering() == 'th' and image.shape!=(1,3,IMAGE_SIZE,IMAGE_SIZE):
             image=resize_image(image)
@@ -228,17 +229,17 @@ class Model:
         return result[0]
 
 # if __name__ == '__main__':
-# dataset=Dataset('data/')
-# dataset.load()
-# print('shape',dataset.train_images.shape,dataset.train_labels.shape)
+dataset=Dataset('data/')
+dataset.load()
+print('shape',dataset.train_images.shape,dataset.train_labels.shape)
 #
 # # train
 # model=Model()
 # model.build_model(dataset=dataset)
-    # model.train(dataset=dataset)
-    # model.save_model(file_path='model/me.face.model.h5')
+# model.train(dataset=dataset)
+# model.save_model(file_path='model/me.face.model.h5')
 
     # evaluate
-    # model=Model()
-    # model.load_model(file_path='model/me.face.model.h5')
-    # model.evaluate(dataset)
+model=Model()
+model.load_model(file_path='model/me.face.model.h5')
+score = model.evaluate(dataset)

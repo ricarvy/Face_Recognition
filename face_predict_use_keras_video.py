@@ -28,12 +28,11 @@ while True:
             x,y,w,h=faceRect
             image=frame[y-10:y+h+10,x-10:x+w+10]
             faceID=model.face_predict(image)
-
+            cv2.rectangle(frame, (x - 10, y - 10), (x + w + 10, y + h + 10), color, thickness=2)
             if faceID == 0:
-                cv2.rectangle(frame,(x-10,y-10),(x+w+10,y+h+10),color,thickness=2)
                 cv2.putText(frame,'men',(x+30,y+30),cv2.FONT_HERSHEY_SIMPLEX,1,(255,0,255),2)
             else:
-                pass
+                cv2.putText(frame,'women',(x+30,y+30),cv2.FONT_HERSHEY_SIMPLEX,1,(255,0,255),2)
     cv2.imshow('Recognization',frame)
 
     k=cv2.waitKey(10)
