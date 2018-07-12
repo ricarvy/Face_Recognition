@@ -42,8 +42,10 @@ def resize_image(image,height=IMAGE_SIZE,width=IMAGE_SIZE):
     constant=cv2.copyMakeBorder(image,top,bottom,left,right,cv2.BORDER_CONSTANT,value=BLACK)
     return cv2.resize(constant,(64,64))
 
-images=[]
-labels=[]
+images = []
+labels = []
+age_labels = []
+gender_labels = []
 def read_path(path_name):
     for dir_item in os.listdir(path_name):
         full_path=os.path.abspath(os.path.join(path_name,dir_item))
@@ -51,23 +53,28 @@ def read_path(path_name):
             read_path(full_path)
         else:
             if dir_item.endswith('.jpg') or dir_item.endswith('.jpeg'):
+                tags = dir_item.split('_')
                 img=cv2.imread(full_path)
                 if img is not None:
                     image=resize_image(img,IMAGE_SIZE,IMAGE_SIZE)
                     images.append(image)
-                    labels.append(path_name)
-                    print(len(images))
-    return images,labels
+                    if int(tags[1])<2:
+                        age_labels.append(int(tags[0]))
+                    else:
+                        print(dir_item)
+                    gender_labels.append(int(tags[1]))
+    return images,age_labels,gender_labels
 
 def load_dataset(path_name):
-    images,labels=read_path(path_name)
+    images,age_labels,gender_labels=read_path(path_name)
 
     images=np.array(images)
 
-    labels=np.array([0 if label.endswith('m') else 1 for label in labels])
-    print(labels)
+    # labels=np.array([0 if label.endswith('m') else 1 for label in labels])
+    age_labels = np.array(age_labels)
+    gender_labels = np.array(gender_labels)
 
-    return images,labels
+    return images,age_labels, gender_labels
 
 class Dataset:
     def __init__(self,path_name):
@@ -89,13 +96,13 @@ class Dataset:
              img_cols=IMAGE_SIZE,
              img_channels=3,
              nb_classes=2):
-        images,labels=load_dataset(self.path_name)
+        images,age_labels,gender_labels=load_dataset(self.path_name)
         train_images,valid_images,train_labels,valid_labels=train_test_split(images,
-                                                                            labels,
+                                                                            gender_labels,
                                                                             test_size=0.3,
                                                                             random_state=random.randint(0,100))
         _,test_images,_,test_labels=train_test_split(images,
-                                                     labels,
+                                                     gender_labels,
                                                      test_size=0.3,
                                                      random_state=random.randint(0,100))
         if K.image_dim_ordering() == 'th':
@@ -128,7 +135,7 @@ class Dataset:
             self.input_shape = (img_rows,
                                 img_cols,
                                 img_channels)
-        print(train_images.shape)
+        #print(train_images.shape)
         # print(valid_images.shape[0])
         # print(test_images.shape[0])
 
@@ -180,7 +187,7 @@ class Model:
         self.model.add(Activation('relu'))
 
         self.model.summary()
-    def train(self,dataset,batch_size=20,nb_epoch=100,data_augmentation=False):
+    def train(self,dataset,batch_size=20,nb_epoch=5,data_augmentation=False):
         sgd=SGD(lr=0.01,
                 decay=1e-6,
                 momentum=0.9,
@@ -229,10 +236,10 @@ class Model:
         return result[0]
 
 # if __name__ == '__main__':
-dataset=Dataset('data/')
-dataset.load()
-print('shape',dataset.train_images.shape,dataset.train_labels.shape)
-#
+# dataset=Dataset('data/crop_part1')
+# dataset.load()
+# print('shape',dataset.train_images.shape,dataset.train_labels.shape)
+# #
 # # train
 # model=Model()
 # model.build_model(dataset=dataset)
@@ -240,6 +247,6 @@ print('shape',dataset.train_images.shape,dataset.train_labels.shape)
 # model.save_model(file_path='model/me.face.model.h5')
 
     # evaluate
-model=Model()
-model.load_model(file_path='model/me.face.model.h5')
-score = model.evaluate(dataset)
+# model=Model()
+# model.load_model(file_path='model/me.face.model.h5')
+# score = model.evaluate(dataset)
